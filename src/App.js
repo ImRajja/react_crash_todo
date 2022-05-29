@@ -1,54 +1,58 @@
-import React, { Component } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Header from './components/layout/Header';
-import Todos from './components/Todos';
-import AddTodo from './components/AddTodo';
-import About from './components/pages/About';
-import uuid from 'uuid';
-import axios from 'axios';
+import React, { Component } from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import Header from "./components/layout/Header";
+import Todos from "./components/Todos";
+import AddTodo from "./components/AddTodo";
+import About from "./components/pages/About";
+import uuid from "uuid";
+import axios from "axios";
 
-import './App.css';
+import "./App.css";
 
 class App extends Component {
   state = {
-    todos: []
+    todos: [],
   };
 
   componentDidMount() {
+    // console.log(`envVariable=> ${envVariable.API_URL}`);
+
     axios
-      .get('https://jsonplaceholder.typicode.com/todos?_limit=10')
-      .then(res => this.setState({ todos: res.data }));
+      .get("https://jsonplaceholder.typicode.com/todos?_limit=10")
+      .then((res) => this.setState({ todos: res.data }));
   }
 
   // Toggle Complete
-  markComplete = id => {
+  markComplete = (id) => {
     this.setState({
-      todos: this.state.todos.map(todo => {
+      todos: this.state.todos.map((todo) => {
         if (todo.id === id) {
           todo.completed = !todo.completed;
         }
         return todo;
-      })
+      }),
     });
   };
 
   // Delete Todo
-  delTodo = id => {
-    axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`).then(res =>
-      this.setState({
-        todos: [...this.state.todos.filter(todo => todo.id !== id)]
-      })
-    );
+  delTodo = (id) => {
+    axios
+      .delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
+      .then((res) =>
+        this.setState({
+          todos: [...this.state.todos.filter((todo) => todo.id !== id)],
+        })
+      );
   };
 
   // Add Todo
-  addTodo = title => {
+  addTodo = (title) => {
     axios
-      .post('https://jsonplaceholder.typicode.com/todos', {
+      .post("https://jsonplaceholder.typicode.com/todos", {
         title,
-        completed: false
+        completed: false,
       })
-      .then(res => {
+      .then((res) => {
         res.data.id = uuid.v4();
         this.setState({ todos: [...this.state.todos, res.data] });
       });
@@ -63,7 +67,7 @@ class App extends Component {
             <Route
               exact
               path="/"
-              render={props => (
+              render={(props) => (
                 <React.Fragment>
                   <AddTodo addTodo={this.addTodo} />
                   <Todos
