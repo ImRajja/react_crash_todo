@@ -34,13 +34,3 @@ export const updateItem = (id, item, user) =>
 export const uploadImage = (item) => {
   API.post(`/upload`, item);
 };
-
-// export const updateItem = (id, user, item) =>
-//   API.put(`/${user.result.email}/resumes/${id}`, {
-//     ...item,
-//     isDone: !updatedTodo.isDone,
-//   });
-
-// export const signIn = (formData) => API.post("/users/signin", formData);
-
-// export const signUp = (formData) => API.post("/users/signup", formData);
