@@ -4,58 +4,64 @@ import Header from "./components/layout/Header";
 import Todos from "./components/Todos";
 import AddTodo from "./components/AddTodo";
 import About from "./components/pages/About";
-import uuid from "uuid";
-import axios from "axios";
+
+import { createItem, fetchItems, deleteItem, updateItem } from "./API/api";
 
 import "./App.css";
 
 class App extends Component {
+  user = {
+    result: {
+      email: "mail2rajja@gmail.com",
+    },
+  };
+
   state = {
     todos: [],
   };
 
   componentDidMount() {
-    // console.log(`envVariable=> ${envVariable.API_URL}`);
-
-    axios
-      .get("https://jsonplaceholder.typicode.com/todos?_limit=10")
-      .then((res) => this.setState({ todos: res.data }));
+    fetchItems(this.user).then((res) => this.setState({ todos: res.data }));
   }
 
   // Toggle Complete
-  markComplete = (id) => {
-    this.setState({
-      todos: this.state.todos.map((todo) => {
-        if (todo.id === id) {
-          todo.completed = !todo.completed;
-        }
-        return todo;
-      }),
+  markComplete = (_id) => {
+    var markedTodo = this.state.todos.filter(function(todo) {
+      return todo._id === _id;
     });
+
+    updateItem(_id, { completed: !markedTodo[0].completed }, this.user).then(
+      (res) => {
+        this.setState({
+          todos: this.state.todos.map((todo) => {
+            if (todo._id === _id) {
+              todo.completed = !todo.completed;
+            }
+            return todo;
+          }),
+        });
+      }
+    );
   };
 
   // Delete Todo
-  delTodo = (id) => {
-    axios
-      .delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
-      .then((res) =>
-        this.setState({
-          todos: [...this.state.todos.filter((todo) => todo.id !== id)],
-        })
-      );
+  delTodo = (_id) => {
+    deleteItem(_id, this.user).then((res) => {
+      console.log(`Im here///`);
+      console.log(res);
+      this.setState({
+        todos: [...this.state.todos.filter((todo) => todo._id !== _id)],
+      });
+    });
   };
 
   // Add Todo
   addTodo = (title) => {
-    axios
-      .post("https://jsonplaceholder.typicode.com/todos", {
-        title,
-        completed: false,
-      })
-      .then((res) => {
-        res.data.id = uuid.v4();
-        this.setState({ todos: [...this.state.todos, res.data] });
+    createItem({ title }, this.user).then((res) => {
+      this.setState({
+        todos: [...this.state.todos, { _id: res.data.insertedId, title }],
       });
+    });
   };
 
   render() {
