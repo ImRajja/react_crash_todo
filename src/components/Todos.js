@@ -1,20 +1,51 @@
-import React, { Component } from 'react';
-import TodoItem from './TodoItem';
-import PropTypes from 'prop-types';
+// import PropTypes from "prop-types";
+import React, { useEffect } from "react";
+import { connect, useDispatch } from "react-redux";
+import { fetchTasks } from "../redux";
+import TodoItem from "./TodoItem";
 
-class Todos extends Component {
-  render() {
-    return this.props.todos.map((todo) => (
-      <TodoItem key={todo._id} todo={todo} markComplete={this.props.markComplete} delTodo={this.props.delTodo} />
-    ));
-  }
-}
+export const Todos = (props) => {
+  const dispatch = useDispatch();
+  const user = { result: { email: "mail2rajja@gmail.com" } };
+  useEffect(() => {
+    console.log(`in todos`);
+    dispatch(fetchTasks(user));
+  }, []);
 
-// PropTypes
-Todos.propTypes = {
-  todos: PropTypes.array.isRequired,
-  markComplete: PropTypes.func.isRequired,
-  delTodo: PropTypes.func.isRequired,
-}
+  console.log(`props==>`);
+  console.log(props);
 
-export default Todos;
+  return props.props.tasks.map((todo) => (
+    <TodoItem
+      key={todo._id}
+      todo={todo}
+      user={user}
+      //   markComplete={this.props.markComplete}
+      //   delTodo={this.props.delTodo}
+    />
+  ));
+};
+
+// Todos.propTypes = {
+//   todos: PropTypes.third,
+// };
+
+const mapStateToProps = (state) => {
+  console.log(`state^^`);
+  console.log(state);
+
+  return {
+    props: state.task,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchTasks: () => dispatch(fetchTasks),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Todos);

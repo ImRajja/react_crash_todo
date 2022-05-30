@@ -1,46 +1,45 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { deleteTask, toggleStatus } from "../redux";
 
-export class TodoItem extends Component {
-  getStyle = () => {
+export default function TodoItem(props) {
+  const dispatch = useDispatch();
+  const getStyle = () => {
     return {
       background: "#f4f4f4",
       padding: "10px",
       borderBottom: "1px #ccc dotted",
-      textDecoration: this.props.todo.completed ? "line-through" : "none",
+      textDecoration: props.todo.completed ? "line-through" : "none",
     };
   };
 
-  componentDidMount = (props) => {
-    console.log(this.props.todo);
-  };
-
-  render() {
-    const { _id, title, completed } = this.props.todo;
-    return (
-      <div style={this.getStyle()}>
-        <p>
-          <input
-            type="checkbox"
-            defaultChecked={completed}
-            onChange={this.props.markComplete.bind(this, _id)}
-          />{" "}
-          {title}
-          <button onClick={this.props.delTodo.bind(this, _id)} style={btnStyle}>
-            x
-          </button>
-        </p>
-      </div>
-    );
-  }
+  const { _id, title, completed } = props.todo;
+  return (
+    <div style={getStyle()}>
+      <p>
+        <input
+          type="checkbox"
+          defaultChecked={completed}
+          onChange={() => dispatch(toggleStatus(_id, completed, props.user))}
+        />{" "}
+        {title}
+        <button
+          onClick={() => dispatch(deleteTask(_id, props.user))}
+          style={btnStyle}
+        >
+          x
+        </button>
+      </p>
+    </div>
+  );
 }
 
 // PropTypes
-TodoItem.propTypes = {
-  todo: PropTypes.object.isRequired,
-  markComplete: PropTypes.func.isRequired,
-  delTodo: PropTypes.func.isRequired,
-};
+// TodoItem.propTypes = {
+//   todo: PropTypes.object.isRequired,
+//   markComplete: PropTypes.func.isRequired,
+//   delTodo: PropTypes.func.isRequired,
+// };
 
 const btnStyle = {
   background: "#ff0000",
@@ -52,4 +51,4 @@ const btnStyle = {
   float: "right",
 };
 
-export default TodoItem;
+// export default TodoItem;

@@ -5,6 +5,9 @@ import Todos from "./components/Todos";
 import AddTodo from "./components/AddTodo";
 import About from "./components/pages/About";
 
+import store from "./redux/store";
+import { Provider } from "react-redux";
+
 import { createItem, fetchItems, deleteItem, updateItem } from "./API/api";
 
 import "./App.css";
@@ -66,28 +69,27 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
-        <div className="App">
-          <div className="container">
-            <Header />
-            <Route
-              exact
-              path="/"
-              render={(props) => (
-                <React.Fragment>
-                  <AddTodo addTodo={this.addTodo} />
-                  <Todos
-                    todos={this.state.todos}
-                    markComplete={this.markComplete}
-                    delTodo={this.delTodo}
-                  />
-                </React.Fragment>
-              )}
-            />
-            <Route path="/about" component={About} />
+      <Provider store={store}>
+        <Router>
+          <div className="App">
+            <div className="container">
+              <Header />
+              <Route
+                exact
+                path="/"
+                render={(props) => (
+                  <React.Fragment>
+                    {/* <AddTodo addTodo={this.addTodo} /> */}
+                    <AddTodo user={this.user} />
+                    <Todos />
+                  </React.Fragment>
+                )}
+              />
+              <Route path="/about" component={About} />
+            </div>
           </div>
-        </div>
-      </Router>
+        </Router>
+      </Provider>
     );
   }
 }
