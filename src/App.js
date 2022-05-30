@@ -23,50 +23,6 @@ class App extends Component {
     todos: [],
   };
 
-  componentDidMount() {
-    fetchItems(this.user).then((res) => this.setState({ todos: res.data }));
-  }
-
-  // Toggle Complete
-  markComplete = (_id) => {
-    var markedTodo = this.state.todos.filter(function(todo) {
-      return todo._id === _id;
-    });
-
-    updateItem(_id, { completed: !markedTodo[0].completed }, this.user).then(
-      (res) => {
-        this.setState({
-          todos: this.state.todos.map((todo) => {
-            if (todo._id === _id) {
-              todo.completed = !todo.completed;
-            }
-            return todo;
-          }),
-        });
-      }
-    );
-  };
-
-  // Delete Todo
-  delTodo = (_id) => {
-    deleteItem(_id, this.user).then((res) => {
-      console.log(`Im here///`);
-      console.log(res);
-      this.setState({
-        todos: [...this.state.todos.filter((todo) => todo._id !== _id)],
-      });
-    });
-  };
-
-  // Add Todo
-  addTodo = (title) => {
-    createItem({ title }, this.user).then((res) => {
-      this.setState({
-        todos: [...this.state.todos, { _id: res.data.insertedId, title }],
-      });
-    });
-  };
-
   render() {
     return (
       <Provider store={store}>
@@ -79,7 +35,6 @@ class App extends Component {
                 path="/"
                 render={(props) => (
                   <React.Fragment>
-                    {/* <AddTodo addTodo={this.addTodo} /> */}
                     <AddTodo user={this.user} />
                     <Todos />
                   </React.Fragment>
