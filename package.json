@@ -12,13 +12,16 @@
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.4.1"
+    "redux-thunk": "^2.4.1",
+    "then-request": "^6.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "apiServer": "cd C:\\Users\\oneno\\Nile\\APISystem\\API && node apiServer.js",
+    "both": "concurrently \"npm run start\" \"npm run apiServer\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -28,5 +31,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "concurrently": "^7.2.1"
+  }
 }

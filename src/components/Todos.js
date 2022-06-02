@@ -31,9 +31,6 @@ export const Todos = (props) => {
 // };
 
 const mapStateToProps = (state) => {
-  console.log(`state^^`);
-  console.log(state);
-
   return {
     props: state.task,
   };
